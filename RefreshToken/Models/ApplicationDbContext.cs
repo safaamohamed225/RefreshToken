@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace JWTRefreshTokenInDotNet6.Models
+namespace RefreshToken.Models
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {

@@ -1,4 +1,4 @@
-﻿namespace JWTRefreshTokenInDotNet6.Settings
+﻿namespace RefreshToken.Settings
 {
     public class JWT
     {

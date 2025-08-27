@@ -1,5 +1,5 @@
-﻿using JWTRefreshTokenInDotNet6.Models;
-using JWTRefreshTokenInDotNet6.Settings;
+﻿using RefreshToken.Models;
+using RefreshToken.Settings;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -9,7 +9,7 @@ using System.Text;
 using System.Security.Cryptography;
 using Microsoft.EntityFrameworkCore;
 
-namespace JWTRefreshTokenInDotNet6.Services
+namespace RefreshToken.Services
 {
     public class AuthService : IAuthService
     {
@@ -61,7 +61,7 @@ namespace JWTRefreshTokenInDotNet6.Services
             return new AuthModel
             {
                 Email = user.Email,
-                ExpiresOn = jwtSecurityToken.ValidTo,
+                //ExpiresOn = jwtSecurityToken.ValidTo,
                 IsAuthenticated = true,
                 Roles = new List<string> { "User" },
                 Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken),
@@ -88,7 +88,7 @@ namespace JWTRefreshTokenInDotNet6.Services
             authModel.Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
             authModel.Email = user.Email;
             authModel.Username = user.UserName;
-            authModel.ExpiresOn = jwtSecurityToken.ValidTo;
+            //authModel.ExpiresOn = jwtSecurityToken.ValidTo;
             authModel.Roles = rolesList.ToList();
 
             return authModel;

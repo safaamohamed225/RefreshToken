@@ -1,6 +1,6 @@
-﻿using JWTRefreshTokenInDotNet6.Models;
+﻿using RefreshToken.Models;
 
-namespace JWTRefreshTokenInDotNet6.Services
+namespace RefreshToken.Services
 {
     public interface IAuthService
     {

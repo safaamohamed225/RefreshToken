@@ -1,6 +1,6 @@
-using JWTRefreshTokenInDotNet6.Models;
-using JWTRefreshTokenInDotNet6.Services;
-using JWTRefreshTokenInDotNet6.Settings;
+using RefreshToken.Models;
+using RefreshToken.Services;
+using RefreshToken.Settings;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;

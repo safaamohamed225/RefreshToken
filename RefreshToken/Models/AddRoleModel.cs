@@ -1,4 +1,4 @@
-﻿namespace JWTRefreshTokenInDotNet6.Models
+﻿namespace RefreshToken.Models
 {
     public class AddRoleModel
     {

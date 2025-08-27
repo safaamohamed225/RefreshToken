@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace JWTRefreshTokenInDotNet6.Models
+namespace RefreshToken.Models
 {
     public class TokenRequestModel
     {

@@ -1,9 +1,9 @@
-﻿using JWTRefreshTokenInDotNet6.Models;
-using JWTRefreshTokenInDotNet6.Services;
+﻿using RefreshToken.Models;
+using RefreshToken.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace JWTRefreshTokenInDotNet6.Controllers
+namespace RefreshToken.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

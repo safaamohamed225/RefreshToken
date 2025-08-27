@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 
-namespace JWTRefreshTokenInDotNet6.Models
+namespace RefreshToken.Models
 {
     public class ApplicationUser : IdentityUser
     {
@@ -10,5 +10,7 @@ namespace JWTRefreshTokenInDotNet6.Models
 
         [MaxLength(50)]
         public string LastName { get; set; }
+
+        public IList<RefreshToken>? RefreshTokens { get; set; }
     }
 }
