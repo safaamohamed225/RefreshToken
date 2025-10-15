@@ -181,7 +181,6 @@ namespace RefreshToken.Services
                 .FirstOrDefaultAsync(u => u.RefreshTokens.Any(t => t.Token == token));
             if (user is null)
             {
-                authModel.IsAuthenticated = false;
                 authModel.Message = "Invalid token";
                 return authModel;
             }
@@ -189,10 +188,23 @@ namespace RefreshToken.Services
 
             if(!refreshToken.IsActive)
             {
-                authModel.IsAuthenticated = false;
                 authModel.Message = "Inactive token";
                 return authModel;
             }
+
+            refreshToken.RevokedOn = DateTime.UtcNow;
+            var newRefreshToken = GenerateRefreshToken();
+            user.RefreshTokens.Add(newRefreshToken);
+            await _userManager.UpdateAsync(user);
+            var jwtSecurityToken = await CreateJwtToken(user);
+            var rolesList = await _userManager.GetRolesAsync(user);
+            authModel.IsAuthenticated = true;
+            authModel.Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
+            authModel.Email = user.Email;
+            authModel.Username = user.UserName;
+            authModel.Roles = rolesList.ToList();
+            authModel.RefreshToken = newRefreshToken.Token;
+            authModel.RefreshTokenExpiration = newRefreshToken.ExpiresOn;
 
             return authModel;
         }
