@@ -158,6 +158,7 @@ namespace RefreshToken.Services
 
             return jwtSecurityToken;
         }
+
         private RefreshTokenModel GenerateRefreshToken()
         {
             var randomNumber = new byte[32];
@@ -172,5 +173,28 @@ namespace RefreshToken.Services
             };
         }
 
+        public async Task<AuthModel> RefreshTokenAsync(string token)
+        {
+            var authModel = new AuthModel();
+
+            var user = await _userManager.Users.Include(u => u.RefreshTokens)
+                .FirstOrDefaultAsync(u => u.RefreshTokens.Any(t => t.Token == token));
+            if (user is null)
+            {
+                authModel.IsAuthenticated = false;
+                authModel.Message = "Invalid token";
+                return authModel;
+            }
+            var refreshToken = user.RefreshTokens.First(t => t.Token == token);
+
+            if(!refreshToken.IsActive)
+            {
+                authModel.IsAuthenticated = false;
+                authModel.Message = "Inactive token";
+                return authModel;
+            }
+
+            return authModel;
+        }
     }
 }
