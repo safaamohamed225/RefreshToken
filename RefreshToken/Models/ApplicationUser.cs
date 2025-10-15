@@ -11,6 +11,6 @@ namespace RefreshToken.Models
         [MaxLength(50)]
         public string LastName { get; set; }
 
-        public IList<RefreshToken>? RefreshTokens { get; set; }
+        public IList<RefreshTokenModel>? RefreshTokens { get; set; }
     }
 }

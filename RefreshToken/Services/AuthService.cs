@@ -8,6 +8,9 @@ using System.Security.Claims;
 using System.Text;
 using System.Security.Cryptography;
 using Microsoft.EntityFrameworkCore;
+using NuGet.Common;
+using System;
+using System.Security.Cryptography;
 
 namespace RefreshToken.Services
 {
@@ -91,7 +94,22 @@ namespace RefreshToken.Services
             //authModel.ExpiresOn = jwtSecurityToken.ValidTo;
             authModel.Roles = rolesList.ToList();
 
-            return authModel;
+
+            if (user.RefreshTokens.Any(t => t.IsActive))
+            {
+                var activeRefreshToken = user.RefreshTokens.FirstOrDefault(t => t.IsActive);
+                authModel.RefreshToken = activeRefreshToken.Token;
+                authModel.RefreshTokenExpiration = activeRefreshToken.ExpiresOn;
+            }
+            else
+            {
+                var refreshToken = GenerateRefreshToken();
+                authModel.RefreshToken = refreshToken.Token;
+                authModel.RefreshTokenExpiration = refreshToken.ExpiresOn;
+                user.RefreshTokens.Add(refreshToken);
+                await _userManager.UpdateAsync(user);
+            }
+                return authModel;
         }
 
         public async Task<string> AddRoleAsync(AddRoleModel model)
@@ -106,7 +124,7 @@ namespace RefreshToken.Services
 
             var result = await _userManager.AddToRoleAsync(user, model.Role);
 
-            return result.Succeeded ? string.Empty : "Sonething went wrong";
+            return result.Succeeded ? string.Empty : "Something went wrong";
         }
 
         private async Task<JwtSecurityToken> CreateJwtToken(ApplicationUser user)
@@ -140,5 +158,19 @@ namespace RefreshToken.Services
 
             return jwtSecurityToken;
         }
+        private RefreshTokenModel GenerateRefreshToken()
+        {
+            var randomNumber = new byte[32];
+            using var generator = RandomNumberGenerator.Create();
+            generator.GetBytes(randomNumber);
+
+            return new RefreshTokenModel
+            {
+                Token = Convert.ToBase64String(randomNumber),
+                ExpiresOn = DateTime.UtcNow.AddDays(10),
+                CreatedOn = DateTime.UtcNow
+            };
+        }
+
     }
 }
