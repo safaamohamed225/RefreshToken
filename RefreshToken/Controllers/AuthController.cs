@@ -27,7 +27,23 @@ namespace RefreshToken.Controllers
             if (!result.IsAuthenticated)
                 return BadRequest(result.Message);
 
+            SetRefreshTokenInCookie(result.RefreshToken, result.RefreshTokenExpiration);
+
             return Ok(result);
+        }
+
+        [HttpPost("refresh-token")]
+
+        public async Task<IActionResult> RevokeToken([FromBody] RevokeTokenModel model)
+        {
+            var token = model.Token ?? Request.Cookies["refreshToken"];
+            if (string.IsNullOrEmpty(token))
+                return BadRequest("Token is required");
+            var result = await _authService.RevokeTokenAsync(token);
+            if (!result)
+                return NotFound("Token not found");
+            Response.Cookies.Delete("refreshToken");
+            return Ok("Token revoked");
         }
 
         [HttpPost("token")]
